@@ -1,0 +1,30 @@
+[
+    {
+        "id": 1,
+        "img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSkAmfXDNhg86eNz0Bbcgwwr4LdxUWjX_ZOYIm15qyP9g&s=10",
+        "city": "Delhi",
+        "rating": "⭐⭐⭐⭐⭐",
+        "price": "RS 15000"
+    },
+    {
+        "id": 2,
+        "img": "https://www.tiaraahotels.com/public/uploads/locationgallery/787e63e771b93e1180048d5896f920a1.webp",
+        "city":"Manali",
+        "rating":"⭐⭐⭐⭐",
+        "price": "RS 20000"
+    },
+    {
+        "id":3,
+        "img":"https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2c/21/20/c9/facadenight.jpg?w=1200&h=-1&s=1",
+        "city":"Banglore",
+         "rating":"⭐⭐⭐⭐",
+        "price": "RS 35000"
+    },
+    {
+        "id":4,
+        "img":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzYO7HtdwPegcSdrfAuEkPWunTenB7dgyb-ft68QNdCZvfBVrqfGD0Rxk&s=10",
+         "rating":"⭐⭐⭐⭐",
+        "price": "Rs 30000"
+    }
+    
+]
