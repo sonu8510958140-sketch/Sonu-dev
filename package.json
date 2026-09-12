@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   "name": "stay-room-web-page",
+=======
+  "name": "conditional-class",
+>>>>>>> 940b92dbdb5d51bf4fd15e882390c395dda9e2d5
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,6 +16,7 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "react": "^19.2.8",
+<<<<<<< HEAD
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.3",
     "tailwindcss": "^4.3.3"
@@ -22,5 +27,16 @@
     "@vitejs/plugin-react": "^6.1.1",
     "oxlint": "^1.81.0",
     "vite": "^8.3.0"
+=======
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "oxlint": "^1.79.0",
+    "tailwindcss": "^4.3.3",
+    "vite": "^8.2.2"
+>>>>>>> 940b92dbdb5d51bf4fd15e882390c395dda9e2d5
   }
 }
