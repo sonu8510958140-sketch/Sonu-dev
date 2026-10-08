@@ -1,51 +1,67 @@
-import React, { Children } from "react";
-import {createBrowserRouter,Outlet,RouterProvider} from 'react-router-dom'
-import Navbar from "./Component/Navbar";
-import Home from "./Component/Home";
-import Hotels from "./Component/Hotels";
-import MyBooking from "./Component/Mybooking";
-import About from "./Component/About";
-import'./App.css'
-function Layout() {
-  return(
+import { useState } from 'react'
+import Navbar from './Component/Navbar' 
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Flight from './Component/Flight'
+import Train from './Component/Train'
+import Bus from './Component/Bus'
+import Hotels from './Component/Hotels'
+import Login from './Component/Login'
+import Home from './Component/Home'
+import Sign from './Component/Sign'
+import Passengerdetails from './Component/Passengerdetails'
+import TrainPassenger from './Trainpassenger'
+import Payment from './Component/Payment'
+import './App.css'
+
+function App() {
+const router = createBrowserRouter([
+  {path:"/",
+    element:<><Navbar/><Home/></>
+
+  },
+  {
+    path:"/train",
+    element:<><Navbar/><Train/></>
+  },
+  {
+    path:"/flight",
+    element:<><Navbar/><Flight/></>
+  },
+  {
+    path:"/passengerdetails",
+    element:<><Navbar/><Passengerdetails/></>
+  },
+  {
+    path:"/trainpassenger",
+    element:<><Navbar/><TrainPassenger/></>
+  },
+  {
+    path:"/payment",
+    element:<><Navbar/><Payment/></>
+  },
+  {
+    path:"/bus",
+    element:<><Navbar/><Bus/></>
+  },
+  {
+    path:"/hotel",
+    element:<><Navbar/><Hotels/></>
+  },
+  {
+    path:"/Login",
+    element:<><Navbar/><Login /></>
+  },
+  {
+    path:"/sign",
+    element:<><Navbar/><Sign/></>
+  }
+])
+
+  return (
     <>
-    <Navbar/>
-    <Outlet/>
+  <RouterProvider router={router}/>
     </>
   )
-  
-}
-const router =createBrowserRouter([
-  {
-    path:"/",
-    element:<Layout/>,
-    children:[
-      {
-        index:true,
-        element:<Home/>
-      },
-      {
-        path:"/MyBooking",
-        element:<MyBooking/>
-      },
-          {
-        path:"/Hotels",
-        element:<Hotels/>
-      },
-          {
-        path:"/About",
-        element:<About/>
-      }
-
-    ]
-  }
-  
-])
-function App(){
-  return(
-    <RouterProvider router={router}/>
-  )
-
 }
 
 export default App
