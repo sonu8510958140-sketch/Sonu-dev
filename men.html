@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="output.css">
+    <title>Men's Collection | Trendora</title>
+</head>
+<body class="min-h-screen bg-slate-50 text-black">
+    <header class="flex flex-col items-center justify-between gap-2 bg-black px-4 py-3 sm:flex-row">
+        <a href="/" class="p-2 text-3xl font-bold text-white">Trendora</a>
+        <nav aria-label="Main navigation" class="flex flex-wrap justify-center gap-1 text-base text-white sm:gap-3">
+            <a href="/" class="rounded-xl px-3 py-2 hover:bg-white hover:text-black">Home</a>
+            <a href="men.html" aria-current="page" class="rounded-xl bg-white px-3 py-2 text-black">Men</a>
+            <a href="women.html" class="rounded-xl px-3 py-2 transition-colors hover:bg-white hover:text-black focus-visible:bg-white focus-visible:text-black">Women</a>
+            <a href="kids.html" class="rounded-xl px-3 py-2 hover:bg-white hover:text-black">Kids</a>
+            <a href="cart.html" class="rounded-xl px-3 py-2 hover:bg-white hover:text-black">Cart (<span data-cart-count>0</span>)</a>
+        </nav>
+        <form id="men-search" role="search" class="flex w-full max-w-md gap-2 p-2">
+            <label for="product-search" class="sr-only">Search men's products</label>
+            <input id="product-search" name="q" type="search" placeholder="Search men's products" class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-black" autocomplete="off">
+            <button type="submit" class="rounded-xl bg-sky-500 px-4 py-2 text-base font-bold text-black transition-colors hover:bg-sky-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Search</button>
+        </form>
+    </header>
+   
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+        <section class="mb-8 rounded-2xl bg-sky-200 px-4 py-8 text-center sm:mb-10 sm:py-12">
+            <h1 class="text-3xl font-bold sm:text-5xl">Men's Collection</h1>
+            <p class="mx-auto mt-3 max-w-xl text-base text-slate-700 sm:text-lg">Explore jackets, hoodies, and everyday essentials.</p>
+        </section>
+
+        <section aria-label="Men's products">
+            <p id="search-status" class="mb-4 text-sm text-slate-600" role="status" aria-live="polite"></p>
+            <div id="product-list" class="grid grid-cols-1 justify-items-center gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+                <article data-product-card data-product-id="denim-jacket" data-product-name="Classic Denim Jacket" data-product-price="1499" data-search="classic denim jacket outerwear blue" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=800&q=85" alt="Classic denim jacket" class="h-56 w-full bg-slate-100 object-cover sm:h-64">
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm uppercase tracking-wide text-slate-500">Outerwear</p>
+                        <h2 class="mt-1 text-lg font-bold">Classic Denim Jacket</h2>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-2 pt-3">
+                            <p class="text-xl font-bold">Rs 1,499</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+                <article data-product-card data-product-id="relaxed-hoodie" data-product-name="Relaxed Fit Hoodie" data-product-price="999" data-search="relaxed fit hoodie comfort wear sweatshirt" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=800&q=85" alt="Relaxed fit hoodie" class="h-56 w-full bg-slate-100 object-cover sm:h-64">
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm uppercase tracking-wide text-slate-500">Comfort wear</p>
+                        <h2 class="mt-1 text-lg font-bold">Relaxed Fit Hoodie</h2>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-2 pt-3">
+                            <p class="text-xl font-bold">Rs 999</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+                <article data-product-card data-product-id="cotton-tee" data-product-name="Everyday Cotton Tee" data-product-price="400" data-search="everyday cotton tee t-shirt essentials shirt" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=800&q=85" alt="Everyday cotton t-shirt" class="h-56 w-full bg-slate-100 object-cover sm:h-64">
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm uppercase tracking-wide text-slate-500">Essentials</p>
+                        <h2 class="mt-1 text-lg font-bold">Everyday Cotton Tee</h2>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-2 pt-3">
+                            <p class="text-xl font-bold">Rs 400</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+                <article data-product-card data-product-id="winter-coat" data-product-name="Modern Winter Coat" data-product-price="2999" data-search="modern winter coat outerwear warm" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=800&q=85" alt="Modern winter coat" class="h-56 w-full bg-slate-100 object-cover sm:h-64">
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm uppercase tracking-wide text-slate-500">Outerwear</p>
+                        <h2 class="mt-1 text-lg font-bold">Modern Winter Coat</h2>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-2 pt-3">
+                            <p class="text-xl font-bold">Rs 2,999</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+            <footer class="mt-16 bg-black text-white">
+    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
+            <a href="/" class="font-serif text-3xl font-bold tracking-wide">TRENDORA</a>
+            <p class="mt-3 max-w-xs text-base leading-relaxed text-slate-300">Fashion for every season. Find the styles that feel like you.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+            <h2 class="text-lg font-bold">Quick Links</h2>
+            <ul class="mt-3 flex flex-col items-start gap-2 text-slate-300">
+                <li><a href="/" class="transition-colors hover:text-white focus-visible:text-white">Home</a></li>
+                <li><a href="/men.html" class="transition-colors hover:text-white focus-visible:text-white">Men</a></li>
+                <li><a href="women.html" class="transition-colors hover:text-white focus-visible:text-white">Women</a></li>
+                <li><a href="/kid" class="transition-colors hover:text-white focus-visible:text-white">Kids</a></li>
+            </ul>
+        </nav>
+        <div>
+            <h2 class="text-lg font-bold">Your Account</h2>
+            <ul class="mt-3 flex flex-col items-start gap-2 text-slate-300">
+                <li><a href="cart.html" class="transition-colors hover:text-white focus-visible:text-white">Cart</a></li>
+                <li><a href="login.html" class="transition-colors hover:text-white focus-visible:text-white">Login</a></li>
+            </ul>
+        </div>
+        <div>
+            <h2 class="text-lg font-bold"> Customer Service</h2>
+            <ul class="mt-3 flex flex-col items-start gap-2 text-slate-300">
+                <li class="transition-colors hover:text-white focus-visible:text-white">Contact Us</li>
+                <li class="transition-colors hover:text-white focus-visible:text-white">Shipping Info</li>
+                <li class="transition-colors hover:text-white focus-visible:text-white">Retrun Policy</li>
+                <li class="transition-colors hover:text-white focus-visible:text-white">FAQs</li>
+            </ul>
+        </div>
+        
+    </div>
+    <div>
+            <h2 class="text-lg font-bold gap-10"> Follow Us: <span class="text-lg font-bold">Instagram | Facebook | Whatsapp</span></h2>
+        </div>
+    <div class="border-t border-slate-800 px-6 py-4 text-center text-sm text-slate-300 ">
+        <p>&copy; 2026 Trendora. All rights reserved.</p>
+    </div>
+</footer>
+            <p id="no-products" class="hidden py-10 text-center text-slate-600">No products found. Try another search.</p>
+        </section>
+    </main>
+    <script src="Script.js" defer></script>
+</body>
+</html>

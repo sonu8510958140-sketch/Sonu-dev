@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="output.css">
+    <title>Women's Collection | Trendora</title>
+</head>
+<body class="min-h-screen bg-slate-50 text-black">
+    <header class="flex flex-col items-center justify-between gap-2 bg-black px-4 py-3 sm:flex-row">
+        <a href="/" class="p-2 text-3xl font-bold text-white">Trendora</a>
+        <nav aria-label="Main navigation" class="flex flex-wrap justify-center gap-1 text-base text-white sm:gap-3">
+            <a href="/" class="rounded-xl px-3 py-2 transition-colors hover:bg-white hover:text-black">Home</a>
+             <a href="men.html" class="rounded-xl px-3 py-2 transition-colors hover:bg-white hover:text-black">men</a>
+            <a href="kids.html" class="rounded-xl px-3 py-2 transition-colors hover:bg-white hover:text-black">Kids</a>
+            <a href="women.html" aria-current="page" class="rounded-xl bg-white px-3 py-2 text-black">Women</a>
+             <a href="cart.html" class="rounded-xl px-3 py-2 transition-colors hover:bg-white hover:text-black">Cart (<span data-cart-count>0</span>)</a>
+        </nav>
+         <form id="men-search" role="search" class="flex w-full max-w-md gap-2 p-2">
+            <label for="product-search" class="sr-only">Search Women's products</label>
+            <input id="product-search" name="q" type="search" placeholder="Search men's products" class="min-w-0 flex-1 rounded-xl border border-slate-300 bg-white px-3 py-2 text-base text-black" autocomplete="off">
+            <button type="submit" class="rounded-xl bg-sky-500 px-4 py-2 text-base font-bold text-black transition-colors hover:bg-sky-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Search</button>
+        </form>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
+        <section class="mb-8 rounded-2xl bg-sky-200 px-4 py-8 text-center sm:mb-10 sm:py-12">
+            <p class="text-sm font-bold uppercase tracking-[0.2em] text-sky-800">Trendora collection</p>
+            <h1 class="mt-3 text-3xl font-bold sm:text-5xl">Women's Collection</h1>
+            <p class="mx-auto mt-3 max-w-xl text-base text-slate-700 sm:text-lg">Discover dresses, everyday essentials, and standout styles.</p>
+        </section>
+        <div>
+            <h1 class="mt-3 text-3xl font-bold sm:text-5xl text-center ">WINTER DRESSES</h1>
+        </div>
+            <div class="mt-6 grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                <article data-product-card data-product-id="winter-dress" data-product-name="Long Sleeve Crew Neck Dress" data-product-price="1499" data-search="winter dress women long sleeve crew neck" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+                    <div class="flex aspect-square items-center justify-center overflow-hidden bg-white p-4">
+                        <img src="https://m.media-amazon.com/images/I/91U21JuidhL._AC_UY1100_.jpg" alt="Long sleeve crew neck winter dress" class="h-full w-full object-contain">
+                    </div>
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm font-medium uppercase tracking-wide text-slate-500"> winter dress</p>
+                        <h2 class="mt-1 text-xl font-bold">Long Sleeve Crew Neck Dress</h2>
+                        <p class="mt-2 text-sm leading-relaxed text-slate-600">A cozy long-sleeve dress with a classic crew neckline for comfortable cold-weather style.</p>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-3 pt-4">
+                            <p class="text-xl font-bold">Rs 1,499</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+                <article data-product-card data-product-id="womens-long-coat" data-product-name="Women's Long Coat" data-product-price="2499" data-search="winter coat women outerwear long" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+                    <div class="flex aspect-square items-center justify-center overflow-hidden bg-white p-4">
+                        <img src="https://cpimg.tistatic.com/13517561/b/4/export-surplus-women-long-coat.jpeg" alt="Women's long winter coat" class="h-full w-full object-contain">
+                    </div>
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm font-medium uppercase tracking-wide text-slate-500">Winter outerwear</p>
+                        <h2 class="mt-1 text-xl font-bold">Long Coat</h2>
+                        <p class="mt-2 text-sm leading-relaxed text-slate-600">A timeless long coat that adds a polished layer and extra warmth to winter outfits.</p>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-3 pt-4">
+                            <p class="text-xl font-bold">Rs 2,499</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+                <article data-product-card data-product-id="floral-knit-cardigan" data-product-name="Floral Knit Cardigan" data-product-price="999" data-search="floral knit cardigan women winter trending" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+                    <div class="flex aspect-square items-center justify-center overflow-hidden bg-white p-4">
+                        <img src="https://i5.walmartimages.com/seo/Women-Long-Sleeve-Cardigan-Hollow-Crochet-Floral-Sweater-Coat-Beach-Mesh-Shrug_f80beead-3707-47c3-a35b-9abc2019c6ef.8678c4702480759b250658431e0371f8.jpeg" alt="Women's floral knit cardigan" class="h-full w-full object-contain">
+                    </div>
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm font-medium uppercase tracking-wide text-slate-500">Trending knitwear</p>
+                        <h2 class="mt-1 text-xl font-bold">Floral Knit Cardigan</h2>
+                        <p class="mt-2 text-sm leading-relaxed text-slate-600">A soft knit cardigan with a floral pattern for an easy, cozy everyday layer.</p>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-3 pt-4">
+                            <p class="text-xl font-bold">Rs 999</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+                <article data-product-card data-product-id="floral-winter-dress" data-product-name="Floral Winter Dress" data-product-price="1099" data-search="floral winter dress women" class="flex h-full w-full max-w-sm flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-md">
+                    <div class="flex aspect-square items-center justify-center overflow-hidden bg-white p-4">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq7XVR108u2qPfhKWhI0MvzvPGEDR8b2MAm2_OI15rJU8Fl_q1DiPf_yS9&s=10" alt="Floral winter dress" class="h-full w-full object-contain">
+                    </div>
+                    <div class="flex flex-1 flex-col p-4">
+                        <p class="text-sm font-medium uppercase tracking-wide text-slate-500">Trending dresses</p>
+                        <h2 class="mt-1 text-xl font-bold">Floral Winter Dress</h2>
+                        <p class="mt-2 text-sm leading-relaxed text-slate-600">A floral-print dress that brings a bright, feminine touch to your winter wardrobe.</p>
+                        <p class="mt-2 text-sm font-medium text-green-700">Available</p>
+                        <div class="mt-auto flex items-center justify-between gap-3 pt-4">
+                            <p class="text-xl font-bold">Rs 1,099</p>
+                            <button type="button" data-add-to-cart class="rounded-xl bg-black px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">Add to Cart</button>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <footer class="mt-16 bg-black text-white">
+    <div class="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-6 py-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
+            <a href="/" class="font-serif text-3xl font-bold tracking-wide">TRENDORA</a>
+            <p class="mt-3 max-w-xs text-base leading-relaxed text-slate-300">Fashion for every season. Find the styles that feel like you.</p>
+        </div>
+        <nav aria-label="Footer navigation">
+            <h2 class="text-lg font-bold">Quick Links</h2>
+            <ul class="mt-3 flex flex-col items-start gap-2 text-slate-300">
+                <li><a href="/" class="transition-colors hover:text-white focus-visible:text-white">Home</a></li>
+                <li><a href="/men.html" class="transition-colors hover:text-white focus-visible:text-white">Men</a></li>
+                <li><a href="women.html" class="transition-colors hover:text-white focus-visible:text-white">Women</a></li>
+                <li><a href="/kid" class="transition-colors hover:text-white focus-visible:text-white">Kids</a></li>
+            </ul>
+        </nav>
+        <div>
+            <h2 class="text-lg font-bold">Your Account</h2>
+            <ul class="mt-3 flex flex-col items-start gap-2 text-slate-300">
+                <li><a href="cart.html" class="transition-colors hover:text-white focus-visible:text-white">Cart</a></li>
+                <li><a href="login.html" class="transition-colors hover:text-white focus-visible:text-white">Login</a></li>
+            </ul>
+        </div>
+        <div>
+            <h2 class="text-lg font-bold"> Customer Service</h2>
+            <ul class="mt-3 flex flex-col items-start gap-2 text-slate-300">
+                <li class="transition-colors hover:text-white focus-visible:text-white">Contact Us</li>
+                <li class="transition-colors hover:text-white focus-visible:text-white">Shipping Info</li>
+                <li class="transition-colors hover:text-white focus-visible:text-white">Retrun Policy</li>
+                <li class="transition-colors hover:text-white focus-visible:text-white">FAQs</li>
+            </ul>
+        </div>
+        
+    </div>
+    <div>
+            <h2 class="text-lg font-bold gap-10"> Follow Us: <span class="text-lg font-bold">Instagram | Facebook | Whatsapp</span></h2>
+        </div>
+    <div class="border-t border-slate-800 px-6 py-4 text-center text-sm text-slate-300 ">
+        <p>&copy; 2026 Trendora. All rights reserved.</p>
+    </div>
+</footer>
+
+         <p id="cart-status" class="sr-only" role="status" aria-live="polite"></p>
+    <script src="Script.js" defer></script>
+</body>
+</html>
