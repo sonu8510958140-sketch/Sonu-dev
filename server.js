@@ -1,270 +1,198 @@
-require("dotenv").config();
+import 'dotenv/config'
+import bcrypt from 'bcryptjs'
+import MongoStore from 'connect-mongo'
+import { rateLimit } from 'express-rate-limit'
+import express from 'express'
+import session from 'express-session'
+import { MongoClient, ObjectId } from 'mongodb'
 
-const path = require("node:path");
-const { promisify } = require("node:util");
-const {
-    randomBytes,
-    scrypt: scryptCallback,
-    timingSafeEqual,
-} = require("node:crypto");
-const express = require("express");
-const session = require("express-session");
-const MongoStore = require("connect-mongo").default;
-const mongoose = require("mongoose");
-const rateLimit = require("express-rate-limit");
+const { MONGODB_URI, MONGODB_DB = 'chatbot', SESSION_SECRET } = process.env
+const port = Number(process.env.API_PORT || 3001)
 
-const scrypt = promisify(scryptCallback);
-const app = express();
-const port = Number(process.env.PORT) || 3000;
-const mongoUri = process.env.MONGODB_URI;
-const sessionSecret = process.env.SESSION_SECRET;
-
-if (!mongoUri) {
-    throw new Error("MONGODB_URI is required. Set it in your .env file.");
+if (!MONGODB_URI) {
+  throw new Error('MONGODB_URI is required. Add it to your .env file.')
 }
 
-if (!sessionSecret || sessionSecret.length < 32) {
-    throw new Error("SESSION_SECRET is required and must be at least 32 characters.");
+if (!SESSION_SECRET || SESSION_SECRET.length < 32) {
+  throw new Error('SESSION_SECRET must be set to a random value of at least 32 characters.')
 }
 
-const mongoClientPromise = mongoose
-    .connect(mongoUri)
-    .then(() => mongoose.connection.getClient());
+const client = new MongoClient(MONGODB_URI)
+const clientPromise = client.connect()
+const app = express()
 
-const userSchema = new mongoose.Schema(
-    {
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            lowercase: true,
-            trim: true,
-            maxlength: 254,
-        },
-        passwordHash: {
-            type: String,
-            required: true,
-            select: false,
-        },
-    },
-    { timestamps: true },
-);
+app.disable('x-powered-by')
+app.use(express.json({ limit: '10kb' }))
+app.use(session({
+  name: 'chatbot.sid',
+  secret: SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    clientPromise,
+    dbName: MONGODB_DB,
+    collectionName: 'sessions',
+    ttl: 60 * 60 * 24 * 7,
+  }),
+  cookie: {
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+}))
 
-const User = mongoose.model("User", userSchema);
+const authRateLimit = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+  message: { error: 'Too many attempts. Please try again later.' },
+})
 
-async function hashPassword(password) {
-    const salt = randomBytes(16).toString("hex");
-    const derivedKey = await scrypt(password, salt, 64);
-    return `${salt}:${derivedKey.toString("hex")}`;
+const sendUser = (user) => ({
+  id: user._id.toString(),
+  name: user.name,
+  email: user.email,
+})
+
+const getUserId = (request) => {
+  const { userId } = request.session
+  return typeof userId === 'string' && ObjectId.isValid(userId)
+    ? new ObjectId(userId)
+    : null
 }
 
-async function verifyPassword(password, storedHash) {
-    const [salt, keyHex] = storedHash.split(":");
-    if (!salt || !keyHex || !/^[a-f\d]+$/i.test(keyHex)) {
-        return false;
+async function startServer() {
+  await clientPromise
+  const database = client.db(MONGODB_DB)
+  const users = database.collection('users')
+  await users.createIndex({ email: 1 }, { unique: true })
+
+  app.post('/api/auth/register', authRateLimit, async (request, response) => {
+    const { name, email, password, confirmPassword } = request.body ?? {}
+
+    if (typeof name !== 'string' || name.trim().length < 1 || name.trim().length > 80) {
+      return response.status(400).json({ error: 'Name must be between 1 and 80 characters.' })
     }
 
-    const expectedKey = Buffer.from(keyHex, "hex");
-    const derivedKey = await scrypt(password, salt, expectedKey.length);
-    return expectedKey.length === derivedKey.length
-        && timingSafeEqual(expectedKey, derivedKey);
-}
-
-function validCredentials(email, password) {
-    return typeof email === "string"
-        && email.length <= 254
-        && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-        && typeof password === "string"
-        && password.length >= 12
-        && Buffer.byteLength(password, "utf8") <= 1024;
-}
-
-function regenerateSession(req) {
-    return new Promise((resolve, reject) => {
-        req.session.regenerate((error) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            resolve();
-        });
-    });
-}
-
-function saveSession(req) {
-    return new Promise((resolve, reject) => {
-        req.session.save((error) => {
-            if (error) {
-                reject(error);
-                return;
-            }
-            resolve();
-        });
-    });
-}
-
-const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 20,
-    standardHeaders: true,
-    legacyHeaders: false,
-});
-
-app.disable("x-powered-by");
-app.use(express.urlencoded({ extended: false, limit: "10kb", parameterLimit: 10 }));
-app.use(
-    session({
-        name: "trendora.sid",
-        secret: sessionSecret,
-        resave: false,
-        saveUninitialized: false,
-        store: MongoStore.create({
-            clientPromise: mongoClientPromise,
-            collectionName: "sessions",
-        }),
-        cookie: {
-            httpOnly: true,
-            sameSite: "lax",
-            secure: process.env.NODE_ENV === "production",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        },
-    }),
-);
-app.use(express.static(__dirname));
-
-app.get(["/login", "/login.html"], (req, res) => {
-    res.sendFile(path.join(__dirname, "login.html"));
-});
-
-app.get(["/signup", "/signup.html"], (req, res) => {
-    res.sendFile(path.join(__dirname, "signup.html"));
-});
-
-app.get(["/men", "/men.html"], (req, res) => {
-    res.sendFile(path.join(__dirname, "men.html"));
-});
-
-app.get(["/women", "/women.html"], (req, res) => {
-    res.sendFile(path.join(__dirname, "women.html"));
-});
-
-app.get(["/cart", "/cart.html"], (req, res) => {
-    res.sendFile(path.join(__dirname, "cart.html"));
-});
-
-app.get(["/payment", "/payment.html"], (req, res) => {
-    res.sendFile(path.join(__dirname, "payment.html"));
-});
-
-app.get(["/kid", "/kids", "/kids.html"], (req, res) => {
-    res.sendFile(path.join(__dirname, "kids.html"));
-});
-
-app.post("/signup", authLimiter, async (req, res, next) => {
-    const body = req.body ?? {};
-    const email = typeof body.email === "string"
-        ? body.email.trim().toLowerCase()
-        : "";
-    const { password } = body;
-
-    if (typeof password === "string" && typeof body.confirmPassword === "string"
-        && password !== body.confirmPassword) {
-        res.redirect(303, "/signup?error=passwordMismatch");
-        return;
+    if (typeof email !== 'string' || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return response.status(400).json({ error: 'Enter a valid email address.' })
     }
 
-    if (!validCredentials(email, password)) {
-        res.redirect(303, "/signup?error=invalidInput");
-        return;
+    if (typeof password !== 'string' || password.length < 8 || Buffer.byteLength(password, 'utf8') > 72) {
+      return response.status(400).json({ error: 'Password must be at least 8 characters and no more than 72 bytes.' })
     }
+
+    if (password !== confirmPassword) {
+      return response.status(400).json({ error: 'Passwords do not match.' })
+    }
+
+    const normalizedEmail = email.trim().toLowerCase()
 
     try {
-        const passwordHash = await hashPassword(password);
-        await User.create({ email, passwordHash });
-        res.redirect(303, "/login?success=created");
+      const passwordHash = await bcrypt.hash(password, 12)
+      const result = await users.insertOne({
+        name: name.trim(),
+        email: normalizedEmail,
+        passwordHash,
+        createdAt: new Date(),
+      })
+
+      return response.status(201).json({
+        message: 'Account created. You can now log in.',
+        user: { id: result.insertedId.toString(), name: name.trim(), email: normalizedEmail },
+      })
     } catch (error) {
-        if (error.code === 11000) {
-            res.redirect(303, "/signup?error=exists");
-            return;
-        }
-        next(error);
+      if (error.code === 11000) {
+        return response.status(409).json({ error: 'An account with this email already exists.' })
+      }
+
+      throw error
     }
-});
+  })
 
-app.post("/login", authLimiter, async (req, res, next) => {
-    const body = req.body ?? {};
-    const email = typeof body.email === "string"
-        ? body.email.trim().toLowerCase()
-        : "";
-    const { password } = body;
+  app.post('/api/auth/login', authRateLimit, async (request, response) => {
+    const { email, password } = request.body ?? {}
 
-    if (!email || typeof password !== "string" || password.length > 1024) {
-        res.redirect(303, "/login?error=invalid");
-        return;
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return response.status(400).json({ error: 'Enter your email and password.' })
     }
 
-    try {
-        const user = await User.findOne({ email }).select("+passwordHash");
-        if (!user || !(await verifyPassword(password, user.passwordHash))) {
-            res.redirect(303, "/login?error=invalid");
-            return;
-        }
+    const user = await users.findOne({ email: email.trim().toLowerCase() })
+    const passwordMatches = user
+      ? await bcrypt.compare(password, user.passwordHash)
+      : false
 
-        await regenerateSession(req);
-        req.session.userId = user.id;
-        await saveSession(req);
-        res.redirect(303, "/");
-    } catch (error) {
-        next(error);
-    }
-});
-
-app.post("/logout", (req, res, next) => {
-    req.session.destroy((error) => {
-        if (error) {
-            next(error);
-            return;
-        }
-        res.clearCookie("trendora.sid");
-        res.redirect(303, "/");
-    });
-});
-
-app.get("/api/me", async (req, res, next) => {
-    if (!req.session.userId) {
-        res.status(401).json({ error: "Not logged in" });
-        return;
+    if (!user || !passwordMatches) {
+      return response.status(401).json({ error: 'Invalid email or password.' })
     }
 
-    try {
-        const user = await User.findById(req.session.userId).select("email");
-        if (!user) {
-            res.status(401).json({ error: "Not logged in" });
-            return;
-        }
-        res.json({ email: user.email });
-    } catch (error) {
-        next(error);
-    }
-});
+    await new Promise((resolve, reject) => {
+      request.session.regenerate((error) => (error ? reject(error) : resolve()))
+    })
+    request.session.userId = user._id.toString()
+    await new Promise((resolve, reject) => {
+      request.session.save((error) => (error ? reject(error) : resolve()))
+    })
 
-app.use((error, req, res, next) => {
-    console.error("Request failed:", error);
-    if (res.headersSent) {
-        next(error);
-        return;
-    }
-    res.status(500).send("An unexpected server error occurred.");
-});
+    return response.json({ message: 'Login successful.', user: sendUser(user) })
+  })
 
-async function start() {
-    await mongoClientPromise;
-    app.listen(port, () => {
-        console.log(`Trendora server listening at http://localhost:${port}`);
-    });
+  app.get('/api/auth/me', async (request, response, next) => {
+    const userId = getUserId(request)
+    if (!userId) return response.json({ user: null })
+
+    const user = await users.findOne(
+      { _id: userId },
+      { projection: { name: 1, email: 1 } },
+    )
+
+    if (!user) {
+      return request.session.destroy((error) => {
+        if (error) return next(error)
+        return response.json({ user: null })
+      })
+    }
+
+    return response.json({ user: sendUser(user) })
+  })
+
+  app.post('/api/auth/logout', (request, response, next) => {
+    request.session.destroy((error) => {
+      if (error) return next(error)
+      response.clearCookie('chatbot.sid', { httpOnly: true, sameSite: 'strict' })
+      return response.status(204).end()
+    })
+  })
+
+  app.use('/api', (request, response) => {
+    response.status(404).json({ error: 'API route not found.' })
+  })
+
+  app.use((error, request, response, next) => {
+    console.error('API request failed:', error)
+    if (response.headersSent) return next(error)
+    return response.status(500).json({ error: 'Something went wrong. Please try again.' })
+  })
+
+  const server = app.listen(port, () => {
+    console.log(`Chatbot API listening on http://localhost:${port}`)
+  })
+
+  const shutdown = () => {
+    server.close(async () => {
+      await client.close()
+      process.exit(0)
+    })
+  }
+
+  process.once('SIGINT', shutdown)
+  process.once('SIGTERM', shutdown)
 }
 
-start().catch((error) => {
-    console.error("Unable to start Trendora server:", error);
-    process.exitCode = 1;
-});
+startServer().catch(async (error) => {
+  console.error('Could not start the Chatbot API:', error)
+  await client.close()
+  process.exitCode = 1
+})

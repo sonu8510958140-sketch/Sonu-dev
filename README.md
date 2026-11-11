@@ -1,16 +1,15 @@
-# React + Vite
+# Chatbot
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + Vite frontend with an Express API and MongoDB-backed account registration and login.
 
-Currently, two official plugins are available:
+## Local setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Make sure MongoDB is running locally, or create a MongoDB Atlas cluster.
+2. Copy `.env.example` to `.env` and set `MONGODB_URI` to your MongoDB connection string. Keep `.env` private.
+3. Generate a session secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"` and set it as `SESSION_SECRET` in `.env`.
+4. In one terminal, run `npm run server`.
+5. In another terminal, run `npm run dev`, then open the Vite URL it prints.
 
-## React Compiler
+The API stores users in the `users` collection and login sessions in the `sessions` collection of the database set by `MONGODB_DB`. Passwords are hashed before they are stored. The MongoDB driver uses its default connection-pool settings; monitor MongoDB connection usage as traffic grows before changing pool options.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Before production deployment, set `NODE_ENV=production`, use HTTPS, a strong unique `SESSION_SECRET`, and a MongoDB account with only the required database permissions.
