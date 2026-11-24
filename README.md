@@ -1,15 +1,44 @@
-# Chatbot
+# React + Vite
 
-React + Vite frontend with an Express API and MongoDB-backed account registration and login.
+## Complaint API (Express + MongoDB)
 
-## Local setup
+### Admin status updates
 
-1. Make sure MongoDB is running locally, or create a MongoDB Atlas cluster.
-2. Copy `.env.example` to `.env` and set `MONGODB_URI` to your MongoDB connection string. Keep `.env` private.
-3. Generate a session secret with `node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"` and set it as `SESSION_SECRET` in `.env`.
-4. In one terminal, run `npm run server`.
-5. In another terminal, run `npm run dev`, then open the Vite URL it prints.
+Set `ADMIN_EMAIL` in the root `.env` to the registered admin account's email. Promote that account in `mongosh` (using the configured database):
 
-The API stores users in the `users` collection and login sessions in the `sessions` collection of the database set by `MONGODB_DB`. Passwords are hashed before they are stored. The MongoDB driver uses its default connection-pool settings; monitor MongoDB connection usage as traffic grows before changing pool options.
+```js
+db.users.updateOne(
+  { email: "admin@example.com" },
+  { $set: { role: "admin" } }
+)
+```
 
-Before production deployment, set `NODE_ENV=production`, use HTTPS, a strong unique `SESSION_SECRET`, and a MongoDB account with only the required database permissions.
+Restart the API after changing `.env`. Only this logged-in account can change complaint statuses.
+
+Set `MONGODB_URI` in a root `.env` file. See `.env.example` for the local MongoDB defaults. Keep database credentials on the server; never add them to frontend environment variables.
+
+Install dependencies, then run the API and frontend in separate terminals:
+
+```sh
+npm run server
+npm run dev
+```
+
+The frontend proxies `/api` requests to the Express API on port `3001`. Complaint submissions are saved in the `complaints` collection in the configured database. The API returns a reference number for each submission.
+
+Signup saves accounts in the `users` collection with scrypt-hashed passwords, and login verifies credentials against those accounts.
+
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+
+Currently, two official plugins are available:
+
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+
+## React Compiler
+
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+
+## Expanding the Oxlint configuration
+
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
